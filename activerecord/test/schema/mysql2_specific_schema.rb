@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-ActiveRecord::Schema.define do
+ActiveRecord::Schema::Current.define do
   if supports_datetime_with_precision?
     create_table :datetime_defaults, force: true do |t|
       t.datetime :modified_datetime, precision: nil, default: -> { "CURRENT_TIMESTAMP" }

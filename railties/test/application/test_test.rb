@@ -124,7 +124,7 @@ module ApplicationTests
       assert_unsuccessful_run "models/user_test.rb", "Migrations are pending"
 
       app_file "db/schema.rb", <<-RUBY
-        ActiveRecord::Schema.define(version: #{version}) do
+        ActiveRecord::Schema::Current.define(version: #{version}) do
           create_table :users do |t|
             t.string :name
           end
@@ -246,7 +246,7 @@ module ApplicationTests
         end
       RUBY
       app_file "db/schema.rb", <<-RUBY
-        ActiveRecord::Schema.define(version: #{version}) do
+        ActiveRecord::Schema::Current.define(version: #{version}) do
           create_table :users do |t|
             t.string :name
           end
@@ -257,7 +257,7 @@ module ApplicationTests
 
       # Simulate `db:rollback` + edit of the migration file + `db:migrate`
       app_file "db/schema.rb", <<-RUBY
-        ActiveRecord::Schema.define(version: #{version}) do
+        ActiveRecord::Schema::Current.define(version: #{version}) do
           create_table :users do |t|
             t.string :name
             t.integer :age
@@ -301,7 +301,7 @@ Expected: ["id", "name"]
 
       # Simulate `db:migrate`
       app_file "db/schema.rb", <<-RUBY
-        ActiveRecord::Schema.define(version: #{version}) do
+        ActiveRecord::Schema::Current.define(version: #{version}) do
           create_table :users do |t|
             t.string :name
           end

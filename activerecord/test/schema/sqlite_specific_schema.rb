@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-ActiveRecord::Schema.define do
+ActiveRecord::Schema::Current.define do
   create_table :defaults, force: true do |t|
     t.date :modified_date, default: -> { "CURRENT_DATE" }
     t.date :fixed_date, default: "2004-01-01"

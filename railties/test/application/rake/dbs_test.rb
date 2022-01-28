@@ -475,7 +475,7 @@ module ApplicationTests
         rails "runner", "ActiveRecord::Base.connection.create_table(:posts) {|t| t.string :title }"
 
         app_file "db/schema.rb", <<-RUBY
-          ActiveRecord::Schema.define(version: 20140423102712) do
+          ActiveRecord::Schema::Current.define(version: 20140423102712) do
             create_table(:comments) {}
           end
         RUBY
@@ -505,7 +505,7 @@ module ApplicationTests
           ActiveRecord::Base.primary_key_prefix_type = :table_name
         RUBY
         app_file "db/schema.rb", <<-RUBY
-          ActiveRecord::Schema.define(version: 20140423102712) do
+          ActiveRecord::Schema::Current.define(version: 20140423102712) do
             create_table("goose".pluralize) do |t|
               t.string :name
             end
@@ -533,7 +533,7 @@ module ApplicationTests
         ENV.delete "RACK_ENV"
 
         app_file "db/schema.rb", <<-RUBY
-            ActiveRecord::Schema.define(version: "1") do
+            ActiveRecord::Schema::Current.define(version: "1") do
               create_table :users do |t|
                 t.string :name
               end

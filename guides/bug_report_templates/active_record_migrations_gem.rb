@@ -20,7 +20,7 @@ require "logger"
 ActiveRecord::Base.establish_connection(adapter: "sqlite3", database: ":memory:")
 ActiveRecord::Base.logger = Logger.new(STDOUT)
 
-ActiveRecord::Schema.define do
+ActiveRecord::Schema::Current.define do
   create_table :payments, force: true do |t|
     t.decimal :amount, precision: 10, scale: 0, default: 0, null: false
   end

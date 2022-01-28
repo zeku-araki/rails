@@ -37,8 +37,28 @@ class ActiveRecordSchemaTest < ActiveRecord::TestCase
     ActiveRecord::Base.primary_key_prefix_type = old_primary_key_prefix_type
   end
 
+  def test_schema_without_version_is_the_7_0_schema
+    schema_class = ActiveRecord::Schema
+    assert schema_class < ActiveRecord::Migration[7.0]
+    assert_not schema_class < ActiveRecord::Migration[6.1]
+    assert schema_class < ActiveRecord::Schema::Definition
+  end
+
+  def test_current_schema_is_the_current_version_schema
+    schema_class = ActiveRecord::Schema::Current
+    assert schema_class < ActiveRecord::Migration[ActiveRecord::Migration.current_version]
+    assert_not schema_class < ActiveRecord::Migration[6.1]
+    assert schema_class < ActiveRecord::Schema::Definition
+  end
+
+  def test_schema_version_accessor
+    schema_class = ActiveRecord::Schema[6.1]
+    assert schema_class < ActiveRecord::Migration[6.1]
+    assert schema_class < ActiveRecord::Schema::Definition
+  end
+
   def test_schema_define
-    ActiveRecord::Schema.define(version: 7) do
+    ActiveRecord::Schema::Current.define(version: 7) do
       create_table :fruits do |t|
         t.column :color, :string
         t.column :fruit_size, :string  # NOTE: "size" is reserved in Oracle
@@ -57,7 +77,7 @@ class ActiveRecordSchemaTest < ActiveRecord::TestCase
     ActiveRecord::Base.table_name_prefix = "nep_"
     @schema_migration.reset_table_name
     ActiveRecord::InternalMetadata.reset_table_name
-    ActiveRecord::Schema.define(version: 7) do
+    ActiveRecord::Schema::Current.define(version: 7) do
       create_table :fruits do |t|
         t.column :color, :string
         t.column :fruit_size, :string  # NOTE: "size" is reserved in Oracle
@@ -74,7 +94,7 @@ class ActiveRecordSchemaTest < ActiveRecord::TestCase
 
   def test_schema_raises_an_error_for_invalid_column_type
     assert_raise NoMethodError do
-      ActiveRecord::Schema.define(version: 8) do
+      ActiveRecord::Schema::Current.define(version: 8) do
         create_table :vegetables do |t|
           t.unknown :color
         end
@@ -97,7 +117,7 @@ class ActiveRecordSchemaTest < ActiveRecord::TestCase
   end
 
   def test_schema_load_with_multiple_indexes_for_column_of_different_names
-    ActiveRecord::Schema.define do
+    ActiveRecord::Schema::Current.define do
       create_table :multiple_indexes do |t|
         t.string "foo"
         t.index ["foo"], name: "multiple_indexes_foo_1"
@@ -113,7 +133,7 @@ class ActiveRecordSchemaTest < ActiveRecord::TestCase
 
   if current_adapter?(:PostgreSQLAdapter)
     def test_timestamps_with_and_without_zones
-      ActiveRecord::Schema.define do
+      ActiveRecord::Schema::Current.define do
         create_table :has_timestamps do |t|
           t.datetime "default_format"
           t.datetime "without_time_zone"
@@ -130,7 +150,7 @@ class ActiveRecordSchemaTest < ActiveRecord::TestCase
   end
 
   def test_timestamps_without_null_set_null_to_false_on_create_table
-    ActiveRecord::Schema.define do
+    ActiveRecord::Schema::Current.define do
       create_table :has_timestamps do |t|
         t.timestamps
       end
@@ -141,7 +161,7 @@ class ActiveRecordSchemaTest < ActiveRecord::TestCase
   end
 
   def test_timestamps_without_null_set_null_to_false_on_change_table
-    ActiveRecord::Schema.define do
+    ActiveRecord::Schema::Current.define do
       create_table :has_timestamps
 
       change_table :has_timestamps do |t|
@@ -155,7 +175,7 @@ class ActiveRecordSchemaTest < ActiveRecord::TestCase
 
   if ActiveRecord::Base.connection.supports_bulk_alter?
     def test_timestamps_without_null_set_null_to_false_on_change_table_with_bulk
-      ActiveRecord::Schema.define do
+      ActiveRecord::Schema::Current.define do
         create_table :has_timestamps
 
         change_table :has_timestamps, bulk: true do |t|
@@ -169,7 +189,7 @@ class ActiveRecordSchemaTest < ActiveRecord::TestCase
   end
 
   def test_timestamps_without_null_set_null_to_false_on_add_timestamps
-    ActiveRecord::Schema.define do
+    ActiveRecord::Schema::Current.define do
       create_table :has_timestamps
       add_timestamps :has_timestamps, default: Time.now
     end
@@ -180,7 +200,7 @@ class ActiveRecordSchemaTest < ActiveRecord::TestCase
 
   if supports_datetime_with_precision?
     def test_timestamps_sets_precision_on_create_table
-      ActiveRecord::Schema.define do
+      ActiveRecord::Schema::Current.define do
         create_table :has_timestamps do |t|
           t.timestamps
         end
@@ -191,7 +211,7 @@ class ActiveRecordSchemaTest < ActiveRecord::TestCase
     end
 
     def test_timestamps_sets_precision_on_change_table
-      ActiveRecord::Schema.define do
+      ActiveRecord::Schema::Current.define do
         create_table :has_timestamps
 
         change_table :has_timestamps do |t|
@@ -205,7 +225,7 @@ class ActiveRecordSchemaTest < ActiveRecord::TestCase
 
     if ActiveRecord::Base.connection.supports_bulk_alter?
       def test_timestamps_sets_precision_on_change_table_with_bulk
-        ActiveRecord::Schema.define do
+        ActiveRecord::Schema::Current.define do
           create_table :has_timestamps
 
           change_table :has_timestamps, bulk: true do |t|
@@ -219,7 +239,7 @@ class ActiveRecordSchemaTest < ActiveRecord::TestCase
     end
 
     def test_timestamps_sets_precision_on_add_timestamps
-      ActiveRecord::Schema.define do
+      ActiveRecord::Schema::Current.define do
         create_table :has_timestamps
         add_timestamps :has_timestamps, default: Time.now
       end

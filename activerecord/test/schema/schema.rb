@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-ActiveRecord::Schema.define do
+ActiveRecord::Schema::Current.define do
   # ------------------------------------------------------------------- #
   #                                                                     #
   #   Please keep these create table statements in alphabetical order   #

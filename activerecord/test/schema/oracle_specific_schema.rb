@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-ActiveRecord::Schema.define do
+ActiveRecord::Schema::Current.define do
   execute "drop table test_oracle_defaults" rescue nil
   execute "drop sequence test_oracle_defaults_seq" rescue nil
   execute "drop sequence companies_nonstd_seq" rescue nil

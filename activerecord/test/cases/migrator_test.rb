@@ -226,7 +226,7 @@ class MigratorTest < ActiveRecord::TestCase
     schema_migration = ActiveRecord::Base.connection.schema_migration
     ActiveRecord::Migrator.migrations_paths = path
 
-    ActiveRecord::Schema.define(version: 3) do
+    ActiveRecord::Schema::Current.define(version: 3) do
     end
 
     assert_equal [

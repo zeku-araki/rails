@@ -113,7 +113,7 @@ class PostgresqlEnumTest < ActiveRecord::PostgreSQLTestCase
   def test_schema_load
     original, $stdout = $stdout, StringIO.new
 
-    ActiveRecord::Schema.define do
+    ActiveRecord::Schema::Current.define do
       create_enum :color, ["blue", "green"]
 
       change_table :postgresql_enums do |t|

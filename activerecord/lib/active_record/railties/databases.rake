@@ -548,7 +548,7 @@ db_namespace = namespace :db do
     # desc "Recreate the test database from an existent schema file (schema.rb or structure.sql, depending on `config.active_record.schema_format`)"
     task load_schema: %w(db:test:purge) do
       should_reconnect = ActiveRecord::Base.connection_pool.active_connection?
-      ActiveRecord::Schema.verbose = false
+      ActiveRecord::Schema::Current.verbose = false
       ActiveRecord::Base.configurations.configs_for(env_name: "test").each do |db_config|
         ActiveRecord::Tasks::DatabaseTasks.load_schema(db_config)
       end
@@ -584,7 +584,7 @@ db_namespace = namespace :db do
       namespace :load_schema do
         task name => "db:test:purge:#{name}" do
           should_reconnect = ActiveRecord::Base.connection_pool.active_connection?
-          ActiveRecord::Schema.verbose = false
+          ActiveRecord::Schema::Current.verbose = false
           db_config = ActiveRecord::Base.configurations.configs_for(env_name: "test", name: name)
           ActiveRecord::Tasks::DatabaseTasks.load_schema(db_config)
         ensure

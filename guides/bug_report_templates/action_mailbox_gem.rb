@@ -45,7 +45,7 @@ Rails.application.initialize!
 require ActiveStorage::Engine.root.join("db/migrate/20170806125915_create_active_storage_tables.rb").to_s
 require ActionMailbox::Engine.root.join("db/migrate/20180917164000_create_action_mailbox_tables.rb").to_s
 
-ActiveRecord::Schema.define do
+ActiveRecord::Schema::Current.define do
   CreateActiveStorageTables.new.change
   CreateActionMailboxTables.new.change
 end

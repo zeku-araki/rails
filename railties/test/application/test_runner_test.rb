@@ -557,7 +557,7 @@ module ApplicationTests
       file_name = create_parallel_processes_test_file
 
       app_file "db/schema.rb", <<-RUBY
-        ActiveRecord::Schema.define(version: 1) do
+        ActiveRecord::Schema::Current.define(version: 1) do
           create_table :users do |t|
             t.string :name
           end
@@ -577,7 +577,7 @@ module ApplicationTests
       file_name = create_parallel_processes_test_file
 
       app_file "db/schema.rb", <<-RUBY
-        ActiveRecord::Schema.define(version: 1) do
+        ActiveRecord::Schema::Current.define(version: 1) do
           create_table :users do |t|
             t.string :name
           end
@@ -636,7 +636,7 @@ module ApplicationTests
       file_name = create_parallel_threads_test_file
 
       app_file "db/schema.rb", <<-RUBY
-        ActiveRecord::Schema.define(version: 1) do
+        ActiveRecord::Schema::Current.define(version: 1) do
           create_table :users do |t|
             t.string :name
           end
